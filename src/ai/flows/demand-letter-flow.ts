@@ -39,8 +39,9 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateDemandLetterInputSchema},
   output: {schema: GenerateDemandLetterOutputSchema},
   prompt: `
-You are an AI assistant creating a legally-formatted demand letter.
-Generate a formal demand letter with a serious, professional tone suitable for legal use.
+You are an AI assistant creating a formal, legally-formatted demand letter.
+The letter must be suitable for use in a legal setting, such as a precursor to a small claims court filing.
+Generate the full text of the demand letter based on the following details.
 
 **Claimant Information:**
 Name: {{yourName}}
@@ -53,14 +54,28 @@ Address: {{defendantAddress}}
 **Dispute Details:**
 Incident Date: {{incidentDate}}
 Amount Demanded: \${{amount}}
-Description: {{disputeDescription}}
+Description of Dispute: {{disputeDescription}}
 
-**Instructions:**
-1.  **Format:** Create the full letter text. Start with the claimant's address block, followed by the date, the defendant's address block, a subject line (RE:), and the letter body.
-2.  **Content:** The body must state the demand for \${{amount}}, mention the incident on {{incidentDate}} related to {{disputeDescription}}, and warn of potential legal action (like small claims court) if payment is not made within 15 days.
-3.  **Closing:** End with "Sincerely," and the claimant's name.
-4.  **Tone & Style:** The tone must be formal. The output must be plain text, formatted to look like a standard letter printed on paper with a font like Times New Roman.
-5.  **No Placeholders:** Do not include placeholders like "[Your Phone Number]" or "[Your Email Address]". Generate only the complete letter text.
+**Letter Requirements:**
+1.  **Format:**
+    - Start with the claimant's (your) full name and address at the top left.
+    - Below that, add the current date: {{currentDate}}.
+    - Below the date, add the defendant's full name and address.
+    - Include a subject line, formatted as: "RE: Demand for Payment Regarding Incident on {{incidentDate}}"
+2.  **Content:**
+    - The opening paragraph must clearly state that this is a formal demand for payment.
+    - The body must detail the claim, referencing the incident on {{incidentDate}} and the basis for the \${{amount}} demand as described in {{disputeDescription}}.
+    - State a clear deadline for payment (e.g., "within 15 calendar days of the date of this letter").
+    - Include a concluding paragraph that explicitly states if payment is not received by the deadline, you will pursue all available legal remedies, including but not limited to, filing a lawsuit in small claims court. Mention that they may be liable for court costs and interest.
+    - This letter should be considered a final attempt to resolve this matter amicably.
+3.  **Tone & Style:**
+    - The tone must be serious, formal, and professional. Use clear, unambiguous language.
+    - The output must be plain text, formatted to look like a standard letter printed on a physical document. Use a font style similar to Times New Roman.
+4.  **No Placeholders:**
+    - The generated letter must be complete and ready to send.
+    - Do NOT include any placeholders like "[Your Phone Number]", "[Your Email Address]", or bracketed instructions.
+
+Generate the letter now.
 `,
 });
 
