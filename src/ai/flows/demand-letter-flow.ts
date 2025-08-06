@@ -39,33 +39,29 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateDemandLetterInputSchema},
   output: {schema: GenerateDemandLetterOutputSchema},
   prompt: `
-You are a legal writing assistant experienced in drafting demand letters suitable for small claims court. Generate a professional, fully formatted demand letter to be used in a small claims case based on the information provided below. The letter should be written in a formal tone, clear and concise, legally appropriate for a U.S. small claims court, and should include the following sections:
+You are a legal writing assistant experienced in drafting demand letters suitable for small claims court. Generate a professional, fully formatted demand letter to be used in a small claims case.
 
-Sender's contact information
-Date
-Recipient's contact information
-Subject line
-Salutation
-Introduction and summary of the dispute
-Detailed explanation of the incident, including date and what occurred
-The demand (i.e., what is being requested, including amount owed)
-A deadline for resolution (e.g., 14 days from the date of the letter)
-Statement of intent to file a small claims case if the matter is not resolved
-Closing and signature line
+The letter must be complete and ready to send, with no placeholders. It should be written in a formal tone, be clear and concise, and be legally appropriate for a U.S. small claims court.
 
-The final letter must be complete, with no placeholders for information like phone numbers or emails. It should be ready to be copied and used in court without any further editing.
+**Instructions:**
+1.  **Format:** Use a standard U.S. business letter format.
+2.  **Sender/Recipient:** The letter should begin with the sender's name and address, followed by the current date, and then the recipient's name and address. Integrate this information naturally into the letter's header.
+3.  **Subject Line:** Include a "RE:" (Regarding) line that briefly states the purpose of the letter (e.g., "Demand for Payment for Property Damage").
+4.  **Content:** The body of the letter must clearly state the facts of the dispute, reference the date of the incident, demand a specific resolution (payment of the specified amount), set a firm deadline for payment (e.g., 14 days from the date of the letter), and state the intent to pursue legal action in small claims court if the demand is not met.
+5.  **Tone:** Maintain a polite but firm and professional tone throughout.
+6.  **No Placeholders:** The final letter must be complete. Do not use placeholders like "[Your Name]" or "[Date]".
 
 **Input Information:**
-Your Full Name: {{yourName}}
-Your Full Address: {{yourAddress}}
-Defendant's Full Name: {{defendantName}}
-Defendant's Full Address: {{defendantAddress}}
-Brief Description of Dispute: {{disputeDescription}}
-Amount Owed ($): {{amount}}
-Date of Incident: {{incidentDate}}
-Current Date: {{currentDate}}
+- Your Full Name (Claimant): {{{yourName}}}
+- Your Full Address: {{{yourAddress}}}
+- Defendant's Full Name: {{{defendantName}}}
+- Defendant's Full Address: {{{defendantAddress}}}
+- Description of Dispute: {{{disputeDescription}}}
+- Amount Owed ($): {{{amount}}}
+- Date of Incident: {{{incidentDate}}}
+- Current Date: {{{currentDate}}}
 
-Generate the demand letter now in standard U.S. business letter format.
+Generate the demand letter now.
 `,
 });
 
