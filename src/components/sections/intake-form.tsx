@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -57,6 +58,12 @@ export default function IntakeForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      disputeType: undefined,
+      disputeAmount: 0,
+      zipCode: "",
+      incidentDate: undefined,
+    },
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
