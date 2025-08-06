@@ -25,7 +25,7 @@ const GenerateDemandLetterInputSchema = z.object({
 export type GenerateDemandLetterInput = z.infer<typeof GenerateDemandLetterInputSchema>;
 
 const GenerateDemandLetterOutputSchema = z.object({
-  letter: z.string().describe('The full text of the generated demand letter.'),
+  letter: z.string().describe('The full text of the generated demand letter, formatted professionally for legal use.'),
 });
 
 export type GenerateDemandLetterOutput = z.infer<typeof GenerateDemandLetterOutputSchema>;
@@ -39,12 +39,23 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateDemandLetterInputSchema},
   output: {schema: GenerateDemandLetterOutputSchema},
   prompt: `
-You are an AI assistant that specializes in creating legally-formatted documents. Your task is to generate a formal demand letter based on the user's input. The tone should be serious, professional, and suitable for use in a legal context. The font should be a standard, legible typeface like Times New Roman or Arial.
+You are an AI assistant specializing in creating legally-formatted documents. Your task is to generate a formal demand letter based on the user's input. The tone must be serious, professional, and suitable for use in a legal context. The font should appear as a standard, legible typeface like Times New Roman or Arial when printed.
 
-**Format the letter exactly as follows:**
+Generate the full text for the letter. Start with the claimant's information, followed by the date, the defendant's information, a subject line, and then the body of the letter. The letter should clearly state the reason for the demand, the amount owed, and the consequences of non-payment. Conclude with a closing and the claimant's name.
 
-[Your Name]
-[Your Address]
+**Do not include placeholders like "[Your Phone Number]" or "[Your Email Address]". Generate the complete letter body.**
+
+Here is the information provided by the user:
+- Claimant Name: {{yourName}}
+- Claimant Address: {{yourAddress}}
+- Defendant Name: {{defendantName}}
+- Defendant Address: {{defendantAddress}}
+- Incident Date: {{incidentDate}}
+- Amount Demanded: \${{amount}}
+- Dispute Description: {{disputeDescription}}
+
+**Here is the required structure:**
+
 {{yourName}}
 {{yourAddress}}
 
@@ -52,29 +63,20 @@ You are an AI assistant that specializes in creating legally-formatted documents
 
 VIA CERTIFIED MAIL, RETURN RECEIPT REQUESTED
 
-[Defendant's Name]
-[Defendant's Address]
 {{defendantName}}
 {{defendantAddress}}
 
-**RE: Formal Demand for Payment in the Amount of $
-{{amount}}**
+**RE: Formal Demand for Payment in the Amount of \${{amount}}**
 
 Dear {{defendantName}},
 
-This letter serves as a formal demand for payment in the amount of $
-{{amount}}. This demand arises from an incident that occurred on {{incidentDate}}, the details of which are as follows:
+This letter serves as a formal demand for payment in the amount of \${{amount}}. This demand arises from an incident that occurred on {{incidentDate}}, concerning the following: {{disputeDescription}}.
 
-{{disputeDescription}}
+I have made this demand in good faith to resolve this matter without resorting to litigation. You are hereby directed to remit payment in the full amount of \${{amount}} within fifteen (15) calendar days from your receipt of this letter.
 
-I have made this demand in good faith in an attempt to resolve this matter without the need for litigation. You are hereby directed to remit payment in the full amount of $
-{{amount}} within fifteen (15) calendar days from your receipt of this letter.
+Should you fail to remit payment within the specified timeframe, I will be compelled to pursue all available legal remedies, including, but not limited to, initiating a lawsuit in small claims court. In the event of legal action, I will seek to recover the principal amount, as well as all associated court costs, pre-judgment interest, and any other fees permitted by law.
 
-Should you fail to remit payment within the specified timeframe, I will be compelled to pursue all available legal and equitable remedies, including, but not limited to, initiating a lawsuit in small claims court. Please be advised that in the event of legal action, I will seek to recover the principal amount, as well as all associated court costs, pre-judgment interest, and any other fees permitted by law.
-
-This letter constitutes a final attempt to resolve this matter amicably before legal proceedings are commenced. Your prompt attention to this matter is required.
-
-You may contact me at [Your Phone Number] or [Your Email Address] to arrange for payment.
+This letter constitutes a final attempt to resolve this matter amicably before legal proceedings are commenced. Your prompt attention is required.
 
 Sincerely,
 
