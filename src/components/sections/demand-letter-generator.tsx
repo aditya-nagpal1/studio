@@ -75,7 +75,38 @@ export default function DemandLetterGenerator() {
   };
 
   const handlePrint = () => {
-    window.print();
+    const printableContent = document.getElementById('printable-area')?.innerHTML;
+    if (printableContent) {
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Print Demand Letter</title>
+              <style>
+                body {
+                  font-family: 'Times New Roman', Times, serif;
+                  line-height: 1.5;
+                  margin: 2rem;
+                }
+                pre {
+                  white-space: pre-wrap;
+                  word-wrap: break-word;
+                  font-family: 'Times New Roman', Times, serif;
+                }
+              </style>
+            </head>
+            <body>
+              ${printableContent}
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      }
+    }
   };
 
   return (
@@ -129,12 +160,14 @@ export default function DemandLetterGenerator() {
                             <DialogTrigger asChild>
                                 <Button type="submit" className="w-full" disabled={isLoading}>{isLoading ? 'Generating...' : 'Generate Letter'}</Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-4xl no-print">
+                            <DialogContent className="max-w-4xl">
                                 <DialogHeader>
                                     <DialogTitle>Your Generated Demand Letter</DialogTitle>
                                 </DialogHeader>
-                                <div id="printable-area" className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
-                                  <pre className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
+                                <div className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
+                                  <div id="printable-area">
+                                    <pre className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
+                                  </div>
                                 </div>
                                 <DialogFooter className="sm:justify-end gap-2">
                                     <Button type="button" variant="secondary" onClick={handleCopy}><Copy className="mr-2 h-4 w-4" /> Copy</Button>
