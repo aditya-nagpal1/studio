@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Copy, Printer } from "lucide-react";
+import { Copy, Download } from "lucide-react";
+import jsPDF from "jspdf";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -74,39 +75,19 @@ export default function DemandLetterGenerator() {
     });
   };
 
-  const handlePrint = () => {
-    const printableContent = document.getElementById('printable-area')?.innerHTML;
-    if (printableContent) {
-      const printWindow = window.open('', '_blank');
-      if (printWindow) {
-        printWindow.document.write(`
-          <html>
-            <head>
-              <title>Print Demand Letter</title>
-              <style>
-                body {
-                  font-family: 'Times New Roman', Times, serif;
-                  line-height: 1.5;
-                  margin: 2rem;
-                }
-                pre {
-                  white-space: pre-wrap;
-                  word-wrap: break-word;
-                  font-family: 'Times New Roman', Times, serif;
-                }
-              </style>
-            </head>
-            <body>
-              ${printableContent}
-            </body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.print();
-        printWindow.close();
-      }
-    }
+  const handleDownloadPdf = () => {
+    const doc = new jsPDF();
+    doc.setFont("Times-Roman", "normal");
+    doc.setFontSize(12);
+
+    const margin = 15;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const usableWidth = pageWidth - margin * 2;
+
+    const lines = doc.splitTextToSize(letter, usableWidth);
+    doc.text(lines, margin, margin);
+    
+    doc.save("demand-letter.pdf");
   };
 
   return (
@@ -171,7 +152,7 @@ export default function DemandLetterGenerator() {
                                 </div>
                                 <DialogFooter className="sm:justify-end gap-2">
                                     <Button type="button" variant="secondary" onClick={handleCopy}><Copy className="mr-2 h-4 w-4" /> Copy</Button>
-                                    <Button type="button" onClick={handlePrint}><Printer className="mr-2 h-4 w-4" /> Print</Button>
+                                    <Button type="button" onClick={handleDownloadPdf}><Download className="mr-2 h-4 w-4" /> Download PDF</Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
