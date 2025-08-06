@@ -1,9 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useLanguage } from "@/context/language-context";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,6 +16,21 @@ import { MapPin, Building, Phone } from "lucide-react";
 import { findCourt } from "@/services/court-finder-service";
 import Image from "next/image";
 
+const text = {
+    title: { en: "Find Your Courthouse", es: "Encuentre su Tribunal" },
+    description: { en: "Enter the zip code where the incident occurred to find the correct small claims court.", es: "Ingrese el código postal donde ocurrió el incidente para encontrar el tribunal de reclamos menores correcto." },
+    cardTitle: { en: "Court Finder", es: "Buscador de Tribunales" },
+    cardDescription: { en: "Enter a 5-digit zip code to find court information.", es: "Ingrese un código postal de 5 dígitos para encontrar información del tribunal." },
+    zipPlaceholder: { en: "e.g., 90210", es: "ej., 90210" },
+    findCourt: { en: "Find Court", es: "Buscar Tribunal" },
+    searching: { en: "Searching...", es: "Buscando..." },
+    notFoundTitle: { en: "Not Found", es: "No Encontrado" },
+    notFoundDesc: { en: "We couldn't find a court for that zip code. Please check the zip code or try another one. For official information, check your local county or city government website.", es: "No pudimos encontrar un tribunal para ese código postal. Verifique el código postal o intente con otro. Para obtener información oficial, consulte el sitio web de su condado o gobierno local." },
+    zipRegexError: { en: "Please enter a valid 5-digit zip code.", es: "Por favor ingrese un código postal válido de 5 dígitos." },
+}
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyCaOabsXSqNzVHFljI2zbUv46sMBhWEyHU";
+
 type CourtInfo = {
     name: string;
     address: string;
@@ -22,18 +39,16 @@ type CourtInfo = {
     longitude: number;
 };
 
-const formSchema = z.object({
-  zipCode: z.string().regex(/^\d{5}$/, "Please enter a valid 5-digit zip code."),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-const GOOGLE_MAPS_API_KEY = "AIzaSyCaOabsXSqNzVHFljI2zbUv46sMBhWEyHU";
-
 export default function CourtFinder() {
   const [courtInfo, setCourtInfo] = useState<CourtInfo | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
+
+  const formSchema = z.object({
+    zipCode: z.string().regex(/^\d{5}$/, t(text.zipRegexError)),
+  });
+  type FormValues = z.infer<typeof formSchema>;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -65,15 +80,15 @@ export default function CourtFinder() {
     <section id="court-finder" className="w-full py-20 md:py-24 lg:py-32 bg-background">
       <div className="container px-4 md:px-6">
          <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Find Your Courthouse</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">{t(text.title)}</h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Enter the zip code where the incident occurred to find the correct small claims court.
+                {t(text.description)}
             </p>
         </div>
         <Card className="max-w-2xl mx-auto">
             <CardHeader>
-                <CardTitle>Court Finder</CardTitle>
-                <CardDescription>Enter a 5-digit zip code to find court information.</CardDescription>
+                <CardTitle>{t(text.cardTitle)}</CardTitle>
+                <CardDescription>{t(text.cardDescription)}</CardDescription>
             </CardHeader>
             <CardContent>
                 <Form {...form}>
@@ -84,13 +99,13 @@ export default function CourtFinder() {
                             render={({ field }) => (
                                 <FormItem className="flex-grow">
                                     <FormControl>
-                                        <Input placeholder="e.g., 90210" {...field} />
+                                        <Input placeholder={t(text.zipPlaceholder)} {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" disabled={isLoading}>{isLoading ? "Searching..." : "Find Court"}</Button>
+                        <Button type="submit" disabled={isLoading}>{isLoading ? t(text.searching) : t(text.findCourt)}</Button>
                     </form>
                 </Form>
 
@@ -115,9 +130,9 @@ export default function CourtFinder() {
                 
                 {notFound && (
                     <Alert variant="destructive" className="mt-6">
-                        <AlertTitle>Not Found</AlertTitle>
+                        <AlertTitle>{t(text.notFoundTitle)}</AlertTitle>
                         <AlertDescription>
-                            We couldn't find a court for that zip code. Please check the zip code or try another one. For official information, check your local county or city government website.
+                            {t(text.notFoundDesc)}
                         </AlertDescription>
                     </Alert>
                 )}

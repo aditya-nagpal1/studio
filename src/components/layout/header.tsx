@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/context/language-context";
 import { Menu, Scale, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -12,18 +13,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-
-const navLinks = [
-  { href: "#features", label: "Features" },
-  { href: "#guide", label: "Guide" },
-  { href: "#contact", label: "Contact" },
-];
+const navLinks = {
+    en: [
+        { href: "#features", label: "Features" },
+        { href: "#guide", label: "Guide" },
+        { href: "#contact", label: "Contact" },
+    ],
+    es: [
+        { href: "#features", label: "Características" },
+        { href: "#guide", label: "Guía" },
+        { href: "#contact", label: "Contacto" },
+    ]
+};
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("EN");
+  const { language, setLanguage } = useLanguage();
 
   const closeMenu = () => setIsMenuOpen(false);
+  
+  const currentNavLinks = navLinks[language];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -34,7 +43,7 @@ export default function Header() {
             <span className="font-bold font-headline">Court Companion</span>
           </a>
           <nav className="hidden gap-6 text-sm md:flex">
-            {navLinks.map((link) => (
+            {currentNavLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
@@ -55,10 +64,10 @@ export default function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onSelect={() => setLanguage("EN")}>
+              <DropdownMenuItem onSelect={() => setLanguage("en")}>
                 English
               </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => setLanguage("ES")}>
+              <DropdownMenuItem onSelect={() => setLanguage("es")}>
                 Español
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -83,7 +92,7 @@ export default function Header() {
               </a>
               <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
                 <div className="flex flex-col space-y-3">
-                  {navLinks.map((link) => (
+                  {currentNavLinks.map((link) => (
                     <a
                       key={link.label}
                       href={link.href}

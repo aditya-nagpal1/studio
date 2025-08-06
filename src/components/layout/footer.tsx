@@ -1,6 +1,27 @@
+
+"use client";
+
 import { Facebook, Linkedin, Scale, Twitter } from "lucide-react";
+import { useLanguage } from "@/context/language-context";
+
+const text = {
+  disclaimer: {
+    en: "Court Companion does not provide legal advice. All information on this site is for informational purposes only.",
+    es: "Court Companion no proporciona asesoramiento legal. Toda la información en este sitio es solo para fines informativos.",
+  },
+  privacyPolicy: {
+    en: "Privacy Policy",
+    es: "Política de Privacidad",
+  },
+  termsOfUse: {
+    en: "Terms of Use",
+    es: "Términos de Uso",
+  }
+}
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer id="contact" className="bg-background border-t">
       <div className="container py-12">
@@ -10,7 +31,7 @@ export default function Footer() {
             <span className="text-2xl font-bold font-headline">Court Companion</span>
           </div>
           <p className="max-w-md text-sm text-muted-foreground">
-            Court Companion does not provide legal advice. All information on this site is for informational purposes only.
+            {t(text.disclaimer)}
           </p>
           <div className="flex space-x-4">
             <a href="#" className="text-muted-foreground hover:text-primary">
@@ -25,8 +46,8 @@ export default function Footer() {
           </div>
           <div className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Court Companion. All rights reserved. | 
-            <a href="#" className="ml-1 hover:text-primary">Privacy Policy</a> |
-            <a href="#" className="ml-1 hover:text-primary">Terms of Use</a>
+            <a href="#" className="ml-1 hover:text-primary">{t(text.privacyPolicy)}</a> |
+            <a href="#" className="ml-1 hover:text-primary">{t(text.termsOfUse)}</a>
           </div>
         </div>
       </div>
