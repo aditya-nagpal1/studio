@@ -47,7 +47,7 @@ export default function CourtFinder() {
     setCourtInfo(null);
     setNotFound(false);
     try {
-        const court = await findCourt(data.zipCode);
+        const court = await findCourt(data.zipCode, GOOGLE_MAPS_API_KEY);
         if (court) {
             setCourtInfo(court);
         } else {
