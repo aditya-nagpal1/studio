@@ -75,14 +75,11 @@ export default function DemandLetterGenerator() {
   };
 
   const handlePrint = () => {
-    const printableArea = document.getElementById('printable-letter');
+    const printableArea = document.getElementById('printable-area-wrapper');
     if (printableArea) {
-      const parent = printableArea.parentElement;
-      if(parent) {
-         parent.classList.add('printable-area');
-         window.print();
-         parent.classList.remove('printable-area');
-      }
+      printableArea.classList.add('printable-area');
+      window.print();
+      printableArea.classList.remove('printable-area');
     }
   };
 
@@ -137,12 +134,14 @@ export default function DemandLetterGenerator() {
                             <DialogTrigger asChild>
                                 <Button type="submit" className="w-full" disabled={isLoading}>{isLoading ? 'Generating...' : 'Generate Letter'}</Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-4xl">
+                            <DialogContent className="max-w-4xl no-print">
                                 <DialogHeader>
                                     <DialogTitle>Your Generated Demand Letter</DialogTitle>
                                 </DialogHeader>
-                                <div className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
-                                  <pre id="printable-letter" className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
+                                <div id="printable-area-wrapper">
+                                  <div className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
+                                    <pre id="printable-letter" className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
+                                  </div>
                                 </div>
                                 <DialogFooter className="sm:justify-end gap-2">
                                     <Button type="button" variant="secondary" onClick={handleCopy}><Copy className="mr-2 h-4 w-4" /> Copy</Button>
@@ -158,3 +157,5 @@ export default function DemandLetterGenerator() {
     </section>
   );
 }
+
+    
