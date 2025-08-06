@@ -1,5 +1,4 @@
 import { ImageResponse } from 'next/og'
-import { Scale } from 'lucide-react';
 
 // Image metadata
 export const size = {
@@ -23,7 +22,7 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#2962FF',
-          borderRadius: '50%',
+          borderRadius: '8px',
         }}
       >
         <svg 
@@ -38,9 +37,11 @@ export default function Icon() {
             strokeLinejoin="round"
         >
             <path d="m16 16-4-4-4 4"></path>
+            <path d="m6 2 8.5 8.5"></path>
             <path d="M12 2v4"></path>
             <path d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Z"></path>
             <path d="M12 12a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z"></path>
+            <path d="M22 22 13.5 13.5"></path>
         </svg>
       </div>
     ),
