@@ -47,8 +47,8 @@ export default function FeaturesSection() {
         </div>
         <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
           {features.map((feature) => (
-            <a key={feature.title} href={feature.href} className="block">
-              <Card className="bg-background hover:shadow-lg transition-shadow duration-300 h-full">
+            <a key={feature.title} href={feature.href} className="block group">
+              <Card className="bg-background group-hover:shadow-lg transition-all duration-300 h-full group-hover:-translate-y-2">
                 <CardHeader className="flex flex-row items-center gap-4">
                   {feature.icon}
                   <CardTitle>{feature.title}</CardTitle>
