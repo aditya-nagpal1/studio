@@ -35,7 +35,7 @@ export default function HeroSection() {
   const [loopNum, setLoopNum] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
-  const [typingSpeed, setTypingSpeed] = useState(120);
+  const [typingSpeed, setTypingSpeed] = useState(100);
 
   useEffect(() => {
       setDisplayedText('');
@@ -56,16 +56,16 @@ export default function HeroSection() {
       setDisplayedText(updatedText);
 
       if (isDeleting) {
-        setTypingSpeed(70);
+        setTypingSpeed(50);
       }
 
       if (!isDeleting && updatedText === fullText) {
-        setTypingSpeed(1500); // Pause at the end
+        setTypingSpeed(2000); // Pause at the end
         setIsDeleting(true);
       } else if (isDeleting && updatedText === '') {
         setIsDeleting(false);
         setLoopNum(loopNum + 1);
-        setTypingSpeed(120);
+        setTypingSpeed(100);
       }
     };
 
