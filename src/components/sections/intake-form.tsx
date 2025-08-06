@@ -121,7 +121,7 @@ export default function IntakeForm() {
   };
 
   return (
-    <section id="intake-form" className="w-full py-20 md:py-24 lg:py-32 bg-secondary">
+    <section id="intake-form" className="w-full py-20 md:py-24 lg:py-32 bg-background">
       <div className="container px-4 md:px-6">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">

@@ -2,7 +2,7 @@ import { Facebook, Linkedin, Scale, Twitter } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-secondary border-t">
+    <footer id="contact" className="bg-background border-t">
       <div className="container py-12">
         <div className="flex flex-col items-center justify-center gap-8 text-center">
           <div className="flex items-center space-x-2">
