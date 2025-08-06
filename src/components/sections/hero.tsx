@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useLanguage } from "@/context/language-context";
 import { Button } from "@/components/ui/button";
 
@@ -17,53 +17,62 @@ const text = {
     cta: {
         en: "Start Now",
         es: "Empezar Ahora",
+    },
+    courtCompanion: {
+        en: "Court Companion",
+        es: "Court Companion"
     }
 }
 
 export default function HeroSection() {
   const { t, language } = useLanguage();
-  const [displayedText, setDisplayedText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
+  
+  const toRotate = useMemo(() => [
+    t(text.courtCompanion),
+    t(text.title),
+  ], [language, t]);
+  
   const [loopNum, setLoopNum] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(150);
-
-  const fullText = t(text.title);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [typingSpeed, setTypingSpeed] = useState(120);
 
   useEffect(() => {
-    setDisplayedText('');
-    setIsDeleting(false);
-    setLoopNum(prev => prev + 1); // a new loop for the new language
+      setDisplayedText('');
+      setLoopNum(0);
+      setIsDeleting(false);
   }, [language]);
-  
+
   useEffect(() => {
     let ticker: NodeJS.Timeout;
     const handleTyping = () => {
-      const currentText = fullText;
+      const i = loopNum % toRotate.length;
+      const fullText = toRotate[i];
+
       const updatedText = isDeleting
-        ? currentText.substring(0, displayedText.length - 1)
-        : currentText.substring(0, displayedText.length + 1);
+        ? fullText.substring(0, displayedText.length - 1)
+        : fullText.substring(0, displayedText.length + 1);
 
       setDisplayedText(updatedText);
 
       if (isDeleting) {
-        setTypingSpeed(prevSpeed => prevSpeed / 1.5);
+        setTypingSpeed(70);
       }
 
-      if (!isDeleting && updatedText === currentText) {
-        setTypingSpeed(2000); // Pause at the end
+      if (!isDeleting && updatedText === fullText) {
+        setTypingSpeed(1500); // Pause at the end
         setIsDeleting(true);
       } else if (isDeleting && updatedText === '') {
         setIsDeleting(false);
-        setTypingSpeed(150);
-      } else {
-         setTypingSpeed(isDeleting ? 75 : 150);
+        setLoopNum(loopNum + 1);
+        setTypingSpeed(120);
       }
     };
 
     ticker = setTimeout(handleTyping, typingSpeed);
 
     return () => clearTimeout(ticker);
-  }, [displayedText, isDeleting, typingSpeed, fullText]);
+  }, [displayedText, isDeleting, typingSpeed, loopNum, toRotate]);
 
 
   const handleScroll = () => {
