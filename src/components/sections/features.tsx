@@ -37,7 +37,7 @@ export default function FeaturesSection() {
           <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Key Features</div>
           <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">Everything You Need to Win</h2>
           <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            ClaimHero provides a suite of tools designed to demystify the small claims process and empower you to seek justice.
+            Court Companion provides a suite of tools designed to demystify the small claims process and empower you to seek justice.
           </p>
         </div>
         <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">

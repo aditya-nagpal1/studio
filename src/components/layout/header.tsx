@@ -22,7 +22,7 @@ export default function Header() {
         <div className="mr-4 flex items-center">
           <a href="#" className="mr-6 flex items-center space-x-2">
             <Scale className="h-6 w-6 text-primary" />
-            <span className="font-bold font-headline">ClaimHero</span>
+            <span className="font-bold font-headline">Court Companion</span>
           </a>
           <nav className="hidden gap-6 text-sm md:flex">
             {navLinks.map((link) => (
@@ -50,7 +50,7 @@ export default function Header() {
             <SheetContent side="left" className="pr-0">
               <a href="#" className="mr-6 flex items-center space-x-2" onClick={closeMenu}>
                 <Scale className="h-6 w-6 text-primary" />
-                <span className="font-bold font-headline">ClaimHero</span>
+                <span className="font-bold font-headline">Court Companion</span>
               </a>
               <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
                 <div className="flex flex-col space-y-3">

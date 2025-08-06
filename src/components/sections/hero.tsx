@@ -19,7 +19,7 @@ export default function HeroSection() {
               Small Claims. Big Help.
             </h1>
             <p className="mx-auto max-w-[700px] text-foreground/80 md:text-xl">
-              Empowering you to take legal action without a lawyer. ClaimHero provides the tools you need to file and win your small claims case.
+              Empowering you to take legal action without a lawyer. Court Companion provides the tools you need to file and win your small claims case.
             </p>
           </div>
           <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleScroll}>

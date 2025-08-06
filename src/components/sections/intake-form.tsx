@@ -33,14 +33,8 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { findCourt } from "@/services/court-finder-service";
 
-const MOCK_COURTS: Record<string, { name: string; address: string }> = {
-  "90210": { name: "Beverly Hills Courthouse", address: "9355 Burton Way, Beverly Hills, CA 90210" },
-  "10001": { name: "New York County Civil Court", address: "111 Centre Street, New York, NY 10013" },
-  "60611": { name: "Richard J. Daley Center", address: "50 West Washington Street, Chicago, IL 60602" },
-  "33131": { name: "Miami-Dade County Courthouse", address: "73 West Flagler Street, Miami, FL 33130" },
-  "77002": { name: "Harris County Civil Courthouse", address: "201 Caroline Street, Houston, TX 77002" },
-};
 
 const formSchema = z.object({
   disputeType: z.string({ required_error: "Please select a dispute type." }),
@@ -59,12 +53,16 @@ type ResultState = {
 
 export default function IntakeForm() {
   const [result, setResult] = useState<ResultState>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setIsLoading(true);
+    setResult(null);
+
     const messages: string[] = [];
     let isEligible = true;
 
@@ -86,11 +84,15 @@ export default function IntakeForm() {
     }
     
     // Check zip code
-    const court = MOCK_COURTS[data.zipCode];
-    if (court) {
-      messages.push(`Your case would likely be filed at: ${court.name}, ${court.address}.`);
-    } else {
-      messages.push("We couldn't find a specific court for your zip code in our sample data, but you can find it on your local government's website.");
+    try {
+      const court = await findCourt(data.zipCode);
+      if (court) {
+        messages.push(`Your case would likely be filed at: ${court.name}, ${court.address}.`);
+      } else {
+        messages.push("We couldn't find a specific court for your zip code, but you can find it on your local government's website.");
+      }
+    } catch (error) {
+       messages.push("Could not verify courthouse information at this time.");
     }
 
     if(isEligible) {
@@ -106,10 +108,11 @@ export default function IntakeForm() {
         messages: messages,
       });
     }
+    setIsLoading(false);
   };
 
   return (
-    <section id="intake-form" className="w-full py-20 md:py-24 lg:py-32 bg-background">
+    <section id="intake-form" className="w-full py-20 md:py-24 lg:py-32 bg-secondary">
       <div className="container px-4 md:px-6">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">
@@ -216,7 +219,7 @@ export default function IntakeForm() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full">Check Eligibility</Button>
+                  <Button type="submit" className="w-full" disabled={isLoading}>{isLoading ? 'Checking...' : 'Check Eligibility'}</Button>
                 </form>
               </Form>
 
