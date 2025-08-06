@@ -25,7 +25,7 @@ const GenerateDemandLetterInputSchema = z.object({
 export type GenerateDemandLetterInput = z.infer<typeof GenerateDemandLetterInputSchema>;
 
 const GenerateDemandLetterOutputSchema = z.object({
-  letter: z.string().describe('The full text of the generated demand letter, formatted professionally for legal use.'),
+  letter: z.string().describe('The full text of the generated demand letter, formatted professionally for legal use. It should follow a standard legal letter format, starting with the claimant\'s information, date, defendant\'s information, a RE: line, and then the body of the letter. The font should be standard like Times New Roman or Arial. Do not include placeholders for contact information like phone or email.'),
 });
 
 export type GenerateDemandLetterOutput = z.infer<typeof GenerateDemandLetterOutputSchema>;
@@ -39,49 +39,28 @@ const prompt = ai.definePrompt({
   input: {schema: GenerateDemandLetterInputSchema},
   output: {schema: GenerateDemandLetterOutputSchema},
   prompt: `
-You are an AI assistant specializing in creating legally-formatted documents. Your task is to generate a formal demand letter based on the user's input. The tone must be serious, professional, and suitable for use in a legal context. The font should appear as a standard, legible typeface like Times New Roman or Arial when printed.
+You are an AI assistant creating a legally-formatted demand letter.
+Generate a formal demand letter with a serious, professional tone suitable for legal use.
 
-Generate the full text for the letter. Start with the claimant's information, followed by the date, the defendant's information, a subject line, and then the body of the letter. The letter should clearly state the reason for the demand, the amount owed, and the consequences of non-payment. Conclude with a closing and the claimant's name.
+**Claimant Information:**
+Name: {{yourName}}
+Address: {{yourAddress}}
 
-**Do not include placeholders like "[Your Phone Number]" or "[Your Email Address]". Generate the complete letter body.**
+**Defendant Information:**
+Name: {{defendantName}}
+Address: {{defendantAddress}}
 
-Here is the information provided by the user:
-- Claimant Name: {{yourName}}
-- Claimant Address: {{yourAddress}}
-- Defendant Name: {{defendantName}}
-- Defendant Address: {{defendantAddress}}
-- Incident Date: {{incidentDate}}
-- Amount Demanded: \${{amount}}
-- Dispute Description: {{disputeDescription}}
+**Dispute Details:**
+Incident Date: {{incidentDate}}
+Amount Demanded: \${{amount}}
+Description: {{disputeDescription}}
 
-**Here is the required structure:**
-
-{{yourName}}
-{{yourAddress}}
-
-{{currentDate}}
-
-VIA CERTIFIED MAIL, RETURN RECEIPT REQUESTED
-
-{{defendantName}}
-{{defendantAddress}}
-
-**RE: Formal Demand for Payment in the Amount of \${{amount}}**
-
-Dear {{defendantName}},
-
-This letter serves as a formal demand for payment in the amount of \${{amount}}. This demand arises from an incident that occurred on {{incidentDate}}, concerning the following: {{disputeDescription}}.
-
-I have made this demand in good faith to resolve this matter without resorting to litigation. You are hereby directed to remit payment in the full amount of \${{amount}} within fifteen (15) calendar days from your receipt of this letter.
-
-Should you fail to remit payment within the specified timeframe, I will be compelled to pursue all available legal remedies, including, but not limited to, initiating a lawsuit in small claims court. In the event of legal action, I will seek to recover the principal amount, as well as all associated court costs, pre-judgment interest, and any other fees permitted by law.
-
-This letter constitutes a final attempt to resolve this matter amicably before legal proceedings are commenced. Your prompt attention is required.
-
-Sincerely,
-
-_________________________
-{{yourName}}
+**Instructions:**
+1.  **Format:** Create the full letter text. Start with the claimant's address block, followed by the date, the defendant's address block, a subject line (RE:), and the letter body.
+2.  **Content:** The body must state the demand for \${{amount}}, mention the incident on {{incidentDate}} related to {{disputeDescription}}, and warn of potential legal action (like small claims court) if payment is not made within 15 days.
+3.  **Closing:** End with "Sincerely," and the claimant's name.
+4.  **Tone & Style:** The tone must be formal. The output must be plain text, formatted to look like a standard letter printed on paper with a font like Times New Roman.
+5.  **No Placeholders:** Do not include placeholders like "[Your Phone Number]" or "[Your Email Address]". Generate only the complete letter text.
 `,
 });
 
