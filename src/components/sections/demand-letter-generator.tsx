@@ -1,10 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { format } from "date-fns";
 import { Copy, Printer } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { generateDemandLetter } from "@/ai/flows/demand-letter-flow";
 
 const formSchema = z.object({
   yourName: z.string().min(1, "Your name is required."),
@@ -27,59 +28,42 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const generateDemandLetter = (data: FormValues): string => {
-  return `
-[Your Name]
-[Your Address]
-${data.yourName}
-${data.yourAddress}
-
-${format(new Date(), "MMMM d, yyyy")}
-
-VIA CERTIFIED MAIL
-
-[Defendant's Name]
-[Defendant's Address]
-${data.defendantName}
-${data.defendantAddress}
-
-RE: Demand for Payment in the Amount of $${data.amount.toLocaleString()}
-
-Dear ${data.defendantName},
-
-This letter is a formal demand for payment for the amount of $${data.amount.toLocaleString()}. This amount is owed due to an incident that occurred on ${data.incidentDate}.
-
-The circumstances are as follows:
-${data.disputeDescription}
-
-I have made this demand in good faith to resolve this matter amicably. Please remit payment in the full amount of $${data.amount.toLocaleString()} within 15 days from the receipt of this letter.
-
-If I do not receive payment within 15 days, I will have no choice but to pursue all available legal remedies, including filing a lawsuit in small claims court. Please be advised that in the event of legal action, I will also seek to recover court costs and any other applicable fees.
-
-This letter constitutes a final attempt to resolve this matter before legal proceedings are initiated.
-
-You can contact me at [Your Phone Number] or [Your Email Address] to arrange for payment.
-
-Sincerely,
-
-${data.yourName}
-  `.trim();
-};
-
 
 export default function DemandLetterGenerator() {
   const [letter, setLetter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      yourName: '',
+      yourAddress: '',
+      defendantName: '',
+      defendantAddress: '',
+      disputeDescription: '',
+      amount: 0,
+      incidentDate: '',
+    },
   });
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const generatedLetter = generateDemandLetter(data);
-    setLetter(generatedLetter);
-    setIsModalOpen(true);
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setIsLoading(true);
+    try {
+      const result = await generateDemandLetter(data);
+      setLetter(result.letter);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Error generating letter:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to generate demand letter. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCopy = () => {
@@ -151,14 +135,14 @@ export default function DemandLetterGenerator() {
                         </div>
                         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                             <DialogTrigger asChild>
-                                <Button type="submit" className="w-full">Generate Letter</Button>
+                                <Button type="submit" className="w-full" disabled={isLoading}>{isLoading ? 'Generating...' : 'Generate Letter'}</Button>
                             </DialogTrigger>
                             <DialogContent className="max-w-4xl">
                                 <DialogHeader>
                                     <DialogTitle>Your Generated Demand Letter</DialogTitle>
                                 </DialogHeader>
                                 <div className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
-                                  <pre id="printable-letter" className="text-sm whitespace-pre-wrap font-body">{letter}</pre>
+                                  <pre id="printable-letter" className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
                                 </div>
                                 <DialogFooter className="sm:justify-end gap-2">
                                     <Button type="button" variant="secondary" onClick={handleCopy}><Copy className="mr-2 h-4 w-4" /> Copy</Button>
