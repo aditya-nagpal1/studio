@@ -75,15 +75,7 @@ export default function DemandLetterGenerator() {
   };
 
   const handlePrint = () => {
-    const printableArea = document.getElementById('printable-letter');
-    if (printableArea) {
-      const parent = printableArea.parentElement;
-      if (parent) {
-        parent.classList.add('printable-area');
-        window.print();
-        parent.classList.remove('printable-area');
-      }
-    }
+    window.print();
   };
 
   return (
@@ -141,8 +133,8 @@ export default function DemandLetterGenerator() {
                                 <DialogHeader>
                                     <DialogTitle>Your Generated Demand Letter</DialogTitle>
                                 </DialogHeader>
-                                <div className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
-                                  <pre id="printable-letter" className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
+                                <div id="printable-area" className="max-h-[60vh] overflow-y-auto p-4 border rounded-md" >
+                                  <pre className="text-sm whitespace-pre-wrap font-serif">{letter}</pre>
                                 </div>
                                 <DialogFooter className="sm:justify-end gap-2">
                                     <Button type="button" variant="secondary" onClick={handleCopy}><Copy className="mr-2 h-4 w-4" /> Copy</Button>
