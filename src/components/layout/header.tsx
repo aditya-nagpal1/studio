@@ -2,9 +2,16 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Scale } from "lucide-react";
+import { Menu, Scale, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -14,12 +21,13 @@ const navLinks = [
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [language, setLanguage] = useState("EN");
 
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
+      <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
         <div className="flex items-center">
           <a href="#" className="flex items-center mr-6">
             <Scale className="h-6 w-6 text-primary mr-2" />
@@ -37,7 +45,27 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="absolute right-4 flex items-center md:hidden">
+
+        <div className="hidden md:flex items-center gap-4">
+           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Languages className="h-5 w-5" />
+                <span className="sr-only">Change language</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onSelect={() => setLanguage("EN")}>
+                English
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => setLanguage("ES")}>
+                Español
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
+        <div className="flex items-center md:hidden">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild>
               <Button
