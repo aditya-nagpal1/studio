@@ -11,6 +11,8 @@ type Answers = {
   evidence: 'yes' | 'no' | null;
   demandLetter: 'yes' | 'no' | null;
   timeline: 'yes' | 'no' | null;
+  communication: 'yes' | 'no' | null;
+  expenses: 'yes' | 'no' | null;
 };
 
 export default function ClaimStrengthAnalyzer() {
@@ -18,28 +20,36 @@ export default function ClaimStrengthAnalyzer() {
     evidence: null,
     demandLetter: null,
     timeline: null,
+    communication: null,
+    expenses: null,
   });
 
   const handleValueChange = (key: keyof Answers, value: 'yes' | 'no') => {
     setAnswers((prev) => ({ ...prev, [key]: value }));
   };
 
-  const { score, verdict, explanation, Icon } = useMemo(() => {
-    let currentScore = 1; // Start with a base score
-    if (answers.evidence === 'yes') currentScore += 4;
-    if (answers.demandLetter === 'yes') currentScore += 3;
-    if (answers.timeline === 'yes') currentScore += 3;
+  const { score, verdict, explanation, Icon, progress } = useMemo(() => {
+    let currentScore = 0;
+    const answeredQuestions = Object.values(answers).filter(v => v !== null).length;
 
-    if (answers.evidence === null || answers.demandLetter === null || answers.timeline === null) {
-      return { score: 0, verdict: 'Awaiting Input', explanation: 'Please answer all questions to see your claim strength.', Icon: HelpCircle };
+    if (answers.evidence === 'yes') currentScore += 3;
+    if (answers.demandLetter === 'yes') currentScore += 2;
+    if (answers.timeline === 'yes') currentScore += 2;
+    if (answers.communication === 'yes') currentScore += 2;
+    if (answers.expenses === 'yes') currentScore += 1;
+    
+    const maxScore = 10;
+    
+    if (answeredQuestions < 5) {
+      return { score: 0, progress: answeredQuestions * 20, verdict: 'Awaiting Input', explanation: 'Please answer all questions to see your claim strength.', Icon: HelpCircle };
     }
 
-    if (currentScore > 7) {
-      return { score: currentScore, verdict: 'Strong Case', explanation: 'You have key elements in place, such as written evidence and timely action, which significantly strengthen your claim.', Icon: ShieldCheck };
-    } else if (currentScore >= 4) {
-      return { score: currentScore, verdict: 'Moderate Chance', explanation: 'Your case has some good points, but could be strengthened. Consider gathering more evidence or sending a formal demand letter.', Icon: Gavel };
+    if (currentScore >= 8) {
+      return { score: currentScore, progress: currentScore * 10, verdict: 'Strong Case', explanation: 'You have key elements in place, such as written evidence and timely action, which significantly strengthen your claim.', Icon: ShieldCheck };
+    } else if (currentScore >= 5) {
+      return { score: currentScore, progress: currentScore * 10, verdict: 'Moderate Chance', explanation: 'Your case has some good points, but could be strengthened. Consider gathering more evidence or sending a formal demand letter.', Icon: Gavel };
     } else {
-      return { score: currentScore, verdict: 'Weak Claim', explanation: 'Your case may face challenges. Lacking written evidence or acting after a long delay can make it difficult to win.', Icon: ShieldAlert };
+      return { score: currentScore, progress: currentScore * 10, verdict: 'Weak Claim', explanation: 'Your case may face challenges. Lacking written evidence or clear communication can make it difficult to win.', Icon: ShieldAlert };
     }
   }, [answers]);
 
@@ -58,7 +68,7 @@ export default function ClaimStrengthAnalyzer() {
                 <CardTitle>Case Assessment</CardTitle>
                 <CardDescription>Answer these questions for a quick analysis.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-8">
+            <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label className="text-base">Do you have written evidence (contracts, emails, photos)?</Label>
                 <RadioGroup onValueChange={(v: 'yes' | 'no') => handleValueChange('evidence', v)} className="flex gap-4">
@@ -67,7 +77,7 @@ export default function ClaimStrengthAnalyzer() {
                 </RadioGroup>
               </div>
               <div className="space-y-2">
-                <Label className="text-base">Have you already sent a formal demand letter?</Label>
+                <Label className="text-base">Have you sent a formal demand letter?</Label>
                 <RadioGroup onValueChange={(v: 'yes' | 'no') => handleValueChange('demandLetter', v)} className="flex gap-4">
                   <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="d_yes" /><Label htmlFor="d_yes">Yes</Label></div>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="d_no" /><Label htmlFor="d_no">No</Label></div>
@@ -78,6 +88,20 @@ export default function ClaimStrengthAnalyzer() {
                 <RadioGroup onValueChange={(v: 'yes' | 'no') => handleValueChange('timeline', v)} className="flex gap-4">
                   <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="t_yes" /><Label htmlFor="t_yes">Yes</Label></div>
                   <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="t_no" /><Label htmlFor="t_no">No</Label></div>
+                </RadioGroup>
+              </div>
+               <div className="space-y-2">
+                <Label className="text-base">Did you clearly tell the other party they were at fault?</Label>
+                <RadioGroup onValueChange={(v: 'yes' | 'no') => handleValueChange('communication', v)} className="flex gap-4">
+                  <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="c_yes" /><Label htmlFor="c_yes">Yes</Label></div>
+                  <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="c_no" /><Label htmlFor="c_no">No</Label></div>
+                </RadioGroup>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-base">Have you documented all your expenses and losses?</Label>
+                <RadioGroup onValueChange={(v: 'yes' | 'no') => handleValueChange('expenses', v)} className="flex gap-4">
+                  <div className="flex items-center space-x-2"><RadioGroupItem value="yes" id="exp_yes" /><Label htmlFor="exp_yes">Yes</Label></div>
+                  <div className="flex items-center space-x-2"><RadioGroupItem value="no" id="exp_no" /><Label htmlFor="exp_no">No</Label></div>
                 </RadioGroup>
               </div>
             </CardContent>
@@ -91,8 +115,8 @@ export default function ClaimStrengthAnalyzer() {
                 <CardContent className="text-center space-y-4">
                    <p className="text-muted-foreground">{explanation}</p>
                    <div>
-                       <Label>Claim Strength Score: {score}/10</Label>
-                       <Progress value={score * 10} className="w-full mt-2" />
+                       <Label>{score > 0 ? `Claim Strength Score: ${score}/10` : 'Progress'}</Label>
+                       <Progress value={progress} className="w-full mt-2" />
                    </div>
                 </CardContent>
             </Card>

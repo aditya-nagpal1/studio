@@ -6,26 +6,31 @@ const features = [
     icon: <ShieldCheck className="w-8 h-8 text-primary" />,
     title: "Eligibility Checker",
     description: "Quickly determine if your case qualifies for small claims court based on amount, location, and date.",
+    href: "#intake-form",
   },
   {
     icon: <FileText className="w-8 h-8 text-primary" />,
     title: "Demand Letter Generator",
     description: "Create a professional demand letter to send to the opposing party before you file your claim.",
+    href: "#demand-letter",
   },
   {
     icon: <Gavel className="w-8 h-8 text-primary" />,
     title: "Claim Strength Analyzer",
     description: "Assess the strength of your case based on your evidence and other key factors.",
+    href: "#analyzer",
   },
   {
     icon: <ListChecks className="w-8 h-8 text-primary" />,
     title: "Step-by-Step Guide",
     description: "Follow our interactive checklist to navigate the small claims process from start to finish.",
+    href: "#guide",
   },
    {
     icon: <Map className="w-8 h-8 text-primary" />,
     title: "Court Finder",
     description: "Easily find the correct courthouse for your small claims case using just your zip code.",
+    href: "#court-finder",
   },
 ];
 
@@ -42,15 +47,17 @@ export default function FeaturesSection() {
         </div>
         <div className="mx-auto grid items-start gap-8 sm:max-w-4xl sm:grid-cols-2 md:gap-12 lg:max-w-5xl lg:grid-cols-3">
           {features.map((feature) => (
-            <Card key={feature.title} className="bg-background hover:shadow-lg transition-shadow duration-300">
-              <CardHeader className="flex flex-row items-center gap-4">
-                {feature.icon}
-                <CardTitle>{feature.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{feature.description}</p>
-              </CardContent>
-            </Card>
+            <a key={feature.title} href={feature.href} className="block">
+              <Card className="bg-background hover:shadow-lg transition-shadow duration-300 h-full">
+                <CardHeader className="flex flex-row items-center gap-4">
+                  {feature.icon}
+                  <CardTitle>{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">{feature.description}</p>
+                </CardContent>
+              </Card>
+            </a>
           ))}
         </div>
       </div>
