@@ -19,7 +19,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center">
+      <div className="container flex h-14 max-w-screen-2xl items-center justify-center">
         <div className="flex items-center">
           <a href="#" className="flex items-center mr-6">
             <Scale className="h-6 w-6 text-primary mr-2" />
@@ -37,12 +37,12 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="flex flex-1 items-center justify-end">
+        <div className="absolute right-4 flex items-center md:hidden">
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
-                className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+                className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
               >
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>

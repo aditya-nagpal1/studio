@@ -52,6 +52,8 @@ type ResultState = {
   messages: string[];
 } | null;
 
+const GOOGLE_MAPS_API_KEY = "AIzaSyCaOabsXSqNzVHFljI2zbUv46sMBhWEyHU";
+
 export default function IntakeForm() {
   const [result, setResult] = useState<ResultState>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -92,7 +94,7 @@ export default function IntakeForm() {
     
     // Check zip code
     try {
-      const court = await findCourt(data.zipCode);
+      const court = await findCourt(data.zipCode, GOOGLE_MAPS_API_KEY);
       if (court) {
         messages.push(`Your case would likely be filed at: ${court.name}, ${court.address}.`);
       } else {

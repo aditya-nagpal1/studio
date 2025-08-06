@@ -22,7 +22,7 @@ export default function HeroSection() {
               Empowering you to take legal action without a lawyer. Court Companion provides the tools you need to file and win your small claims case.
             </p>
           </div>
-          <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90" onClick={handleScroll}>
+          <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90" onClick={handleScroll}>
             Start Now
           </Button>
         </div>
