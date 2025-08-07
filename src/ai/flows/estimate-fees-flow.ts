@@ -8,17 +8,9 @@
  * - EstimateFeesOutput - The return type for the estimateCourtFees function.
  */
 
-import { genkit } from 'genkit';
-import { googleAI } from '@/ai/genkit';
+import { ai } from '@/ai/genkit';
 import { googleSearch } from '@genkit-ai/google-cloud';
 import { z } from 'zod';
-
-// Define a local AI instance with the necessary tool
-const localAi = genkit({
-  plugins: [
-    googleAI(),
-  ],
-});
 
 const EstimateFeesInputSchema = z.object({
   disputeAmount: z.number().describe('The monetary amount of the dispute.'),
@@ -39,7 +31,7 @@ export async function estimateCourtFees(input: EstimateFeesInput): Promise<Estim
   return estimateFeesFlow(input);
 }
 
-const prompt = localAi.definePrompt({
+const prompt = ai.definePrompt({
   name: 'estimateFeesPrompt',
   input: {schema: EstimateFeesInputSchema},
   output: {schema: EstimateFeesOutputSchema},
@@ -64,7 +56,7 @@ Generate the fee estimation now.
 `,
 });
 
-const estimateFeesFlow = localAi.defineFlow(
+const estimateFeesFlow = ai.defineFlow(
   {
     name: 'estimateFeesFlow',
     inputSchema: EstimateFeesInputSchema,
