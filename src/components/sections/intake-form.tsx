@@ -50,7 +50,9 @@ const text = {
   breachOfContract: { en: "Breach of Contract", es: "Incumplimiento de Contrato" },
   other: { en: "Other", es: "Otro" },
   disputeAmount: { en: "Dispute Amount", es: "Monto de la Disputa" },
+  disputeAmountPlaceholder: { en: "ex: 1500", es: "ej., 1500" },
   zipCode: { en: "Zip Code of Incident", es: "Código Postal del Incidente" },
+  zipCodePlaceholder: { en: "ex: 90210", es: "ej., 90210" },
   incidentDate: { en: "Incident Date", es: "Fecha del Incidente" },
   pickDate: { en: "Pick a date", es: "Elija una fecha" },
   checkEligibility: { en: "Check Eligibility", es: "Verificar Elegibilidad" },
@@ -195,7 +197,7 @@ export default function IntakeForm() {
                       <FormItem>
                         <FormLabel>{t(text.disputeAmount)}</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="e.g., 1500" {...field} />
+                          <Input type="number" placeholder={t(text.disputeAmountPlaceholder)} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -208,7 +210,7 @@ export default function IntakeForm() {
                       <FormItem>
                         <FormLabel>{t(text.zipCode)}</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., 90210" {...field} />
+                          <Input placeholder={t(text.zipCodePlaceholder)} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

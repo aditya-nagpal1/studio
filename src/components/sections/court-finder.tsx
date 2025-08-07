@@ -21,7 +21,7 @@ const text = {
     description: { en: "Enter the zip code where the incident occurred to find the correct small claims court.", es: "Ingrese el código postal donde ocurrió el incidente para encontrar el tribunal de reclamos menores correcto." },
     cardTitle: { en: "Court Finder", es: "Buscador de Tribunales" },
     cardDescription: { en: "Enter a 5-digit zip code to find court information.", es: "Ingrese un código postal de 5 dígitos para encontrar información del tribunal." },
-    zipPlaceholder: { en: "e.g., 90210", es: "ej., 90210" },
+    zipPlaceholder: { en: "ex: 90210", es: "ej., 90210" },
     findCourt: { en: "Find Court", es: "Buscar Tribunal" },
     searching: { en: "Searching...", es: "Buscando..." },
     notFoundTitle: { en: "Not Found", es: "No Encontrado" },

@@ -31,7 +31,7 @@ const text = {
     disputePlaceholder: { en: "On May 1, 2023, Jane Smith's dog dug under the fence and damaged my garden...", es: "El 1 de mayo de 2023, el perro de Jane Smith cavó debajo de la cerca y dañó mi jardín..." },
     amountOwed: { en: "Amount Owed ($)", es: "Monto Adeudado ($)" },
     incidentDate: { en: "Date of Incident", es: "Fecha del Incidente" },
-    datePlaceholder: { en: "e.g., May 1, 2023", es: "ej., 1 de mayo de 2023" },
+    datePlaceholder: { en: "ex: May 1, 2023", es: "ej., 1 de mayo de 2023" },
     generateLetter: { en: "Generate Letter", es: "Generar Carta" },
     generating: { en: "Generating...", es: "Generando..." },
     modalTitle: { en: "Your Generated Demand Letter", es: "Su Carta de Demanda Generada" },
