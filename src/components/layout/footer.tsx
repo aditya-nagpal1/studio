@@ -3,6 +3,7 @@
 
 import { Facebook, Linkedin, Scale, Twitter } from "lucide-react";
 import { useLanguage } from "@/context/language-context";
+import Link from "next/link";
 
 const text = {
   disclaimer: {
@@ -46,8 +47,8 @@ export default function Footer() {
           </div>
           <div className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Court Companion. All rights reserved. | 
-            <a href="#" className="ml-1 hover:text-primary">{t(text.privacyPolicy)}</a> |
-            <a href="#" className="ml-1 hover:text-primary">{t(text.termsOfUse)}</a>
+            <Link href="/privacy" className="ml-1 hover:text-primary">{t(text.privacyPolicy)}</Link> |
+            <Link href="/terms" className="ml-1 hover:text-primary">{t(text.termsOfUse)}</Link>
           </div>
         </div>
       </div>
