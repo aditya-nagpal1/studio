@@ -1,9 +1,18 @@
 
+"use client";
+
+import { useEffect, useState } from 'react';
 import { LanguageProvider } from '@/context/language-context';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 
 export default function TermsOfServicePage() {
+  const [lastUpdated, setLastUpdated] = useState('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+  }, []);
+
   return (
     <LanguageProvider>
       <div className="flex min-h-screen flex-col bg-background">
@@ -12,7 +21,7 @@ export default function TermsOfServicePage() {
           <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
             <div className="prose prose-gray max-w-4xl mx-auto dark:prose-invert">
               <h1 className="text-4xl font-bold font-headline mb-4">Terms of Use</h1>
-              <p className="text-muted-foreground">Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              <p className="text-muted-foreground">Last Updated: {lastUpdated}</p>
 
               <p>
                 Please read these Terms of Use ("Terms") carefully before using the Court Companion website (the "Service") operated by us. Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms.

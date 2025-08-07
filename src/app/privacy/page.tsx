@@ -1,9 +1,19 @@
 
+"use client";
+
+import { useEffect, useState } from 'react';
 import { LanguageProvider } from '@/context/language-context';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 
 export default function PrivacyPolicyPage() {
+  const [lastUpdated, setLastUpdated] = useState('');
+
+  useEffect(() => {
+    setLastUpdated(new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+  }, []);
+
+
   return (
     <LanguageProvider>
       <div className="flex min-h-screen flex-col bg-background">
@@ -12,7 +22,7 @@ export default function PrivacyPolicyPage() {
           <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
             <div className="prose prose-gray max-w-4xl mx-auto dark:prose-invert">
               <h1 className="text-4xl font-bold font-headline mb-4">Privacy Policy</h1>
-              <p className="text-muted-foreground">Last Updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              <p className="text-muted-foreground">Last Updated: {lastUpdated}</p>
 
               <p>
                 Welcome to Court Companion ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services.
