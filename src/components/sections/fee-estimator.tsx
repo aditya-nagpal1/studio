@@ -12,8 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, Info, FileText, Handshake, Mail, UserCheck, BarChart2 } from "lucide-react";
-import { estimateFees, EstimateFeesOutput } from "@/ai/flows/estimate-fees-flow";
+import { Loader2, Info, FileText, UserCheck } from "lucide-react";
+import { estimateFees, type EstimateFeesOutput } from "@/ai/flows/estimate-fees-flow";
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 
@@ -146,9 +146,12 @@ export default function FeeEstimator() {
           
           <div className="space-y-8">
             {isLoading && (
-              <div className="flex items-center justify-center h-full">
-                <Loader2 className="h-16 w-16 animate-spin text-primary" />
-              </div>
+              <Card className="flex items-center justify-center h-full">
+                <CardContent className="text-center p-6">
+                  <Loader2 className="h-16 w-16 animate-spin text-primary mx-auto" />
+                  <p className="text-muted-foreground mt-4">Finding the latest fees...</p>
+                </CardContent>
+              </Card>
             )}
             {error && (
               <Alert variant="destructive">
@@ -164,16 +167,16 @@ export default function FeeEstimator() {
                     <CardDescription>{results.courtName}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                    <div className="text-center">
-                        <p className="text-muted-foreground">{t(text.totalCost)}</p>
+                    <div className="text-center bg-secondary p-4 rounded-lg">
+                        <p className="text-sm text-muted-foreground">{t(text.totalCost)}</p>
                         <p className="text-4xl font-bold">${results.estimatedTotal.toFixed(2)}</p>
                     </div>
 
                     <div>
                         <h4 className="font-semibold mb-2">{t(text.costBreakdown)}</h4>
-                        <div className="space-y-2">
-                           <div className="flex justify-between items-center"><span className="flex items-center gap-2"><FileText size={16}/>{t(text.filingFee)}</span> <span className="font-medium">${results.filingFee.toFixed(2)}</span></div>
-                           <div className="flex justify-between items-center"><span className="flex items-center gap-2"><UserCheck size={16}/>{t(text.serviceFee)}</span> <span className="font-medium">${results.serviceFee.toFixed(2)}</span></div>
+                        <div className="space-y-2 text-sm">
+                           <div className="flex justify-between items-center p-2 rounded-md hover:bg-secondary"><span className="flex items-center gap-2"><FileText size={16}/>{t(text.filingFee)}</span> <span className="font-medium">${results.filingFee.toFixed(2)}</span></div>
+                           <div className="flex justify-between items-center p-2 rounded-md hover:bg-secondary"><span className="flex items-center gap-2"><UserCheck size={16}/>{t(text.serviceFee)}</span> <span className="font-medium">${results.serviceFee.toFixed(2)}</span></div>
                         </div>
                     </div>
 
@@ -197,7 +200,7 @@ export default function FeeEstimator() {
                               <BarChart data={results.countyComparison}>
                                 <XAxis dataKey="county" stroke="#888888" fontSize={12} tickLine={false} axisLine={false}/>
                                 <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`}/>
-                                <Tooltip formatter={(value) => `$${Number(value).toFixed(2)}`} />
+                                <Tooltip formatter={(value) => `$${Number(value).toFixed(2)}`} contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }}/>
                                 <Bar dataKey="totalCost" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                               </BarChart>
                             </ResponsiveContainer>
@@ -214,4 +217,3 @@ export default function FeeEstimator() {
       </div>
     </section>
   );
-}
