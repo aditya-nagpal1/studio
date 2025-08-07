@@ -61,8 +61,7 @@ export default function StrategyGenerator() {
     setStrategy("");
     try {
       const result = await generateStrategy(data);
-      // Replace newlines with <br /> for HTML rendering
-      setStrategy(result.strategy.replace(/\n/g, '<br />'));
+      setStrategy(result.strategy);
     } catch (error) {
       console.error("Error generating strategy:", error);
       toast({
@@ -76,7 +75,7 @@ export default function StrategyGenerator() {
   };
 
   return (
-    <section id="strategy-generator" className="w-full py-20 md:py-24 lg:py-32 bg-secondary">
+    <section id="strategy-generator" className="w-full py-20 md:py-24 lg:py-32 bg-background">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">{t(text.title)}</h2>
@@ -140,7 +139,7 @@ export default function StrategyGenerator() {
                             <CardTitle>{t(text.strategyTitle)}</CardTitle>
                         </CardHeader>
                         <CardContent className="prose dark:prose-invert max-w-none">
-                            <div dangerouslySetInnerHTML={{ __html: strategy }} />
+                           <div dangerouslySetInnerHTML={{ __html: strategy }} />
                             <Alert variant="default" className="mt-6">
                                 <Lightbulb className="h-4 w-4" />
                                 <AlertTitle>Disclaimer</AlertTitle>
