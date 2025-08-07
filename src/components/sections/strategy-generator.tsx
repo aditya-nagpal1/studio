@@ -61,7 +61,8 @@ export default function StrategyGenerator() {
     setStrategy("");
     try {
       const result = await generateStrategy(data);
-      setStrategy(result.strategy);
+      // Replace newlines with <br /> for HTML rendering
+      setStrategy(result.strategy.replace(/\n/g, '<br />'));
     } catch (error) {
       console.error("Error generating strategy:", error);
       toast({
@@ -138,8 +139,8 @@ export default function StrategyGenerator() {
                         <CardHeader>
                             <CardTitle>{t(text.strategyTitle)}</CardTitle>
                         </CardHeader>
-                        <CardContent className="prose dark:prose-invert">
-                            <div dangerouslySetInnerHTML={{ __html: strategy.replace(/\n/g, '<br />') }} />
+                        <CardContent className="prose dark:prose-invert max-w-none">
+                            <div dangerouslySetInnerHTML={{ __html: strategy }} />
                             <Alert variant="default" className="mt-6">
                                 <Lightbulb className="h-4 w-4" />
                                 <AlertTitle>Disclaimer</AlertTitle>

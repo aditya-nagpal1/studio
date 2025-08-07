@@ -19,7 +19,7 @@ const GenerateStrategyInputSchema = z.object({
 export type GenerateStrategyInput = z.infer<typeof GenerateStrategyInputSchema>;
 
 const GenerateStrategyOutputSchema = z.object({
-  strategy: z.string().describe('A step-by-step strategy for the user to follow. It should be clear, actionable, and formatted with markdown for readability (e.g., using headings, bold text, and lists).'),
+  strategy: z.string().describe('A step-by-step strategy for the user to follow. It should be clear, actionable, and formatted for web display. Use <b> tags for bolding and <u> tags for underlining to emphasize key points. Do not use markdown characters like # or *.'),
 });
 
 export type GenerateStrategyOutput = z.infer<typeof GenerateStrategyOutputSchema>;
@@ -39,14 +39,15 @@ The strategy should be practical, easy to understand for a non-lawyer, and focus
 
 **Instructions:**
 1.  **Analyze the Case:** Carefully review the user's case details and their desired outcome.
-2.  **Structure the Strategy:** Organize the output into logical, numbered steps. Use markdown for formatting (e.g., # for headings, ** for bolding, and * for list items).
-3.  **Key Strategy Points:** The strategy should always include steps like:
+2.  **Structure the Strategy:** Organize the output into logical, numbered steps using simple line breaks.
+3.  **Formatting:** Use HTML tags for formatting. Use <b> for bolding key phrases and <u> for underlining important terms. Do NOT use any markdown characters like '#' or '*'.
+4.  **Key Strategy Points:** The strategy should always include steps like:
     *   Gathering and organizing specific types of evidence relevant to their case.
     *   The importance of sending a formal demand letter (if not already done).
     *   How to prepare for the court hearing (e.g., outlining their argument, preparing questions for the other party).
     *   Tips on courtroom etiquette and presentation.
-4.  **Tone:** Be encouraging and empowering, but maintain a professional and objective tone.
-5.  **Disclaimer:** Do not include a disclaimer in your response. The application will add it separately.
+5.  **Tone:** Be encouraging and empowering, but maintain a professional and objective tone.
+6.  **Disclaimer:** Do not include a disclaimer in your response. The application will add it separately.
 
 **User's Case Information:**
 - **Case Details:** {{{caseDetails}}}
