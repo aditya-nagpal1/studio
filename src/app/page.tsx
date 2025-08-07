@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import { LanguageProvider } from '@/context/language-context';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import HeroSection from '@/components/sections/hero';
@@ -16,21 +15,19 @@ import FeeEstimator from '@/components/sections/fee-estimator';
 
 export default function Home() {
   return (
-    <LanguageProvider>
-      <div className="flex min-h-screen flex-col bg-background">
-        <Header />
-        <main className="flex-1">
-          <HeroSection />
-          <FeaturesSection />
-          <IntakeForm />
-          <Guide />
-          <DemandLetterGenerator />
-          <ClaimStrengthAnalyzer />
-          <CourtFinder />
-          <FeeEstimator />
-        </main>
-        <Footer />
-      </div>
-    </LanguageProvider>
+    <div className="flex min-h-screen flex-col bg-background">
+      <Header />
+      <main className="flex-1">
+        <HeroSection />
+        <FeaturesSection />
+        <IntakeForm />
+        <Guide />
+        <DemandLetterGenerator />
+        <ClaimStrengthAnalyzer />
+        <CourtFinder />
+        <FeeEstimator />
+      </main>
+      <Footer />
+    </div>
   );
 }
