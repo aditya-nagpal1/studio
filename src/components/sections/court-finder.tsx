@@ -12,8 +12,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { MapPin, Building, Phone } from "lucide-react";
+import { MapPin, Building, Phone, Info, Search, Loader2 } from "lucide-react";
 import { findCourt } from "@/services/court-finder-service";
+import { findFilingFee, FindFilingFeeOutput } from "@/ai/flows/find-filing-fee-flow";
 import Image from "next/image";
 
 const text = {
@@ -27,6 +28,12 @@ const text = {
     notFoundTitle: { en: "Not Found", es: "No Encontrado" },
     notFoundDesc: { en: "We couldn't find a court for that zip code. Please check the zip code or try another one. For official information, check your local county or city government website.", es: "No pudimos encontrar un tribunal para ese código postal. Verifique el código postal o intente con otro. Para obtener información oficial, consulte el sitio web de su condado o gobierno local." },
     zipRegexError: { en: "Please enter a valid 5-digit zip code.", es: "Por favor ingrese un código postal válido de 5 dígitos." },
+    findFees: { en: "Find Filing Fees with AI", es: "Buscar Tarifas de Presentación con IA" },
+    findingFees: { en: "Finding fees...", es: "Buscando tarifas..." },
+    feeInfoTitle: { en: "AI-Powered Filing Fee Information", es: "Información de Tarifas de Presentación con IA" },
+    feeDisclaimer: { en: "This information is AI-generated and for informational purposes only. Always verify with the official court for the most accurate and up-to-date fees.", es: "Esta información es generada por IA y solo para fines informativos. Verifique siempre con el tribunal oficial para obtener las tarifas más precisas y actualizadas." },
+    source: { en: "Source", es: "Fuente" },
+    feeSearchError: { en: "AI could not find filing fee information. Please check the court's official website.", es: "La IA no pudo encontrar información sobre las tarifas de presentación. Consulte el sitio web oficial del tribunal." },
 }
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyCaOabsXSqNzVHFljI2zbUv46sMBhWEyHU";
@@ -43,6 +50,9 @@ export default function CourtFinder() {
   const [courtInfo, setCourtInfo] = useState<CourtInfo | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFeeLoading, setIsFeeLoading] = useState(false);
+  const [feeInfo, setFeeInfo] = useState<FindFilingFeeOutput | null>(null);
+  const [feeError, setFeeError] = useState(false);
   const { t } = useLanguage();
 
   const formSchema = z.object({
@@ -57,10 +67,32 @@ export default function CourtFinder() {
     }
   });
 
+  const handleFeeSearch = async () => {
+      if (!courtInfo) return;
+      setIsFeeLoading(true);
+      setFeeInfo(null);
+      setFeeError(false);
+      try {
+          const result = await findFilingFee({ courtName: courtInfo.name, courtAddress: courtInfo.address });
+          if (result && result.filingFee) {
+              setFeeInfo(result);
+          } else {
+              setFeeError(true);
+          }
+      } catch (error) {
+          console.error("Error finding filing fee:", error);
+          setFeeError(true);
+      } finally {
+          setIsFeeLoading(false);
+      }
+  };
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setIsLoading(true);
     setCourtInfo(null);
     setNotFound(false);
+    setFeeInfo(null);
+    setFeeError(false);
     try {
         const court = await findCourt(data.zipCode, GOOGLE_MAPS_API_KEY);
         if (court) {
@@ -115,6 +147,13 @@ export default function CourtFinder() {
                             <h3 className="font-bold text-lg flex items-center gap-2"><Building /> {courtInfo.name}</h3>
                             <p className="text-muted-foreground flex items-center gap-2 mt-2"><MapPin className="w-4 h-4"/> {courtInfo.address}</p>
                             {courtInfo.phone && <p className="text-muted-foreground flex items-center gap-2 mt-1"><Phone className="w-4 h-4"/> {courtInfo.phone}</p>}
+                            <Button onClick={handleFeeSearch} disabled={isFeeLoading} className="mt-4 w-full">
+                                {isFeeLoading ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {t(text.findingFees)}</>
+                                ) : (
+                                    <><Search className="mr-2 h-4 w-4" /> {t(text.findFees)}</>
+                                )}
+                            </Button>
                         </div>
                          <div className="w-full h-64 bg-gray-300">
                            <Image
@@ -128,6 +167,32 @@ export default function CourtFinder() {
                     </div>
                 )}
                 
+                {isFeeLoading && (
+                     <div className="text-center p-4 mt-4">
+                        <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+                        <p className="text-muted-foreground mt-2">{t(text.findingFees)}</p>
+                    </div>
+                )}
+
+                {feeInfo && (
+                     <Alert className="mt-6">
+                        <Info className="h-4 w-4" />
+                        <AlertTitle>{t(text.feeInfoTitle)}</AlertTitle>
+                        <AlertDescription>
+                           <p className="font-semibold text-lg my-2">{feeInfo.filingFee}</p>
+                           {feeInfo.source && <a href={feeInfo.source} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">{t(text.source)}</a>}
+                           <p className="text-xs text-muted-foreground mt-3">{t(text.feeDisclaimer)}</p>
+                        </AlertDescription>
+                    </Alert>
+                )}
+
+                {feeError && (
+                    <Alert variant="destructive" className="mt-6">
+                        <AlertTitle>{t(text.notFoundTitle)}</AlertTitle>
+                        <AlertDescription>{t(text.feeSearchError)}</AlertDescription>
+                    </Alert>
+                )}
+
                 {notFound && (
                     <Alert variant="destructive" className="mt-6">
                         <AlertTitle>{t(text.notFoundTitle)}</AlertTitle>
