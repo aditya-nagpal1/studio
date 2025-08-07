@@ -11,6 +11,7 @@ import Guide from '@/components/sections/guide';
 import DemandLetterGenerator from '@/components/sections/demand-letter-generator';
 import ClaimStrengthAnalyzer from '@/components/sections/claim-strength-analyzer';
 import CourtFinder from '@/components/sections/court-finder';
+import FeeEstimator from '@/components/sections/fee-estimator';
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
         <Guide />
         <DemandLetterGenerator />
         <ClaimStrengthAnalyzer />
+        <FeeEstimator />
         <CourtFinder />
       </main>
       <Footer />
