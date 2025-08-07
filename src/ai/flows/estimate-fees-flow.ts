@@ -51,7 +51,7 @@ const prompt = ai.definePrompt({
 You are a legal cost estimation expert for U.S. small claims court. Your task is to provide a detailed and accurate cost estimate based on the user's inputs. You must use the googleSearch tool to find official, up-to-date information from government or court websites (.gov domains).
 
 **Instructions:**
-1.  **Identify the Court:** Based on the ZIP code, determine the correct county and the specific small claims court. If you cannot find a specific courthouse, use the general county court name (e.g., "Cook County Circuit Court").
+1.  **Identify the Court:** Based on the ZIP code, determine the correct county and the specific small claims court. If you cannot find a specific courthouse, use the general county court name (e.g., "Cook County Circuit Court"). You must provide a court name.
 2.  **Find Filing Fee:** Search for the official filing fee for the identified court. The fee often depends on the claim amount. Note any different fee tiers.
 3.  **Find Service Fee:** Search for the cost of the specified service method (sheriff, certified mail, or private process server) in that county.
 4.  **Check for Fee Waivers:** Search for fee waiver (in forma pauperis) eligibility requirements for that court/state. Briefly summarize the general income-based requirements and provide a direct link to the waiver application form if you can find one. Determine if a hypothetical low-income person might be eligible.
