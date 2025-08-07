@@ -9,8 +9,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // This is to allow cross-origin requests from the development environment.
-  allowedDevOrigins: ["https://*.cloudworkstations.dev"],
   images: {
     remotePatterns: [
       {
