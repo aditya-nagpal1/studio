@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { LanguageProvider } from '@/context/language-context';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 
@@ -14,7 +13,6 @@ export default function TermsOfServicePage() {
   }, []);
 
   return (
-    <LanguageProvider>
       <div className="flex min-h-screen flex-col bg-background">
         <Header />
         <main className="flex-1">
@@ -66,6 +64,5 @@ export default function TermsOfServicePage() {
         </main>
         <Footer />
       </div>
-    </LanguageProvider>
   );
 }
