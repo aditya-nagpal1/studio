@@ -31,10 +31,10 @@ export default function PrivacyPolicyPage() {
                 We may collect personal information that you voluntarily provide to us when you fill out forms on our site, such as the eligibility intake form or the demand letter generator. This information may include:
               </p>
               <ul>
-                <li>Your name and contact information (e.g., address)</li>
-                <li>Information about the other party in your dispute (e.g., name, address)</li>
+                <li>Your name and contact information (ex: address)</li>
+                <li>Information about the other party in your dispute (ex: name, address)</li>
                 <li>Details about your legal dispute, including dates, amounts, and descriptions</li>
-                <li>Your IP address and location data (e.g., zip code) for finding appropriate court venues</li>
+                <li>Your IP address and location data (ex: zip code) for finding appropriate court venues</li>
               </ul>
 
               <h2 className="text-2xl font-bold font-headline mt-8">2. How We Use Your Information</h2>
