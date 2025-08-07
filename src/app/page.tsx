@@ -11,6 +11,7 @@ import Guide from '@/components/sections/guide';
 import DemandLetterGenerator from '@/components/sections/demand-letter-generator';
 import ClaimStrengthAnalyzer from '@/components/sections/claim-strength-analyzer';
 import CourtFinder from '@/components/sections/court-finder';
+import StrategyGenerator from '@/components/sections/strategy-generator';
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <IntakeForm />
         <Guide />
         <DemandLetterGenerator />
+        <StrategyGenerator />
         <ClaimStrengthAnalyzer />
         <CourtFinder />
       </main>

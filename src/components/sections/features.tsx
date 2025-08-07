@@ -3,7 +3,7 @@
 
 import { useLanguage } from "@/context/language-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Gavel, FileText, ShieldCheck, ListChecks, Map, DollarSign } from "lucide-react";
+import { Gavel, FileText, ShieldCheck, ListChecks, Map, Lightbulb } from "lucide-react";
 
 
 const featuresContent = {
@@ -23,6 +23,12 @@ const featuresContent = {
         title: "Demand Letter Generator",
         description: "Create a professional demand letter to send to the opposing party before you file your claim.",
         href: "#demand-letter",
+      },
+      {
+        icon: <Lightbulb className="w-8 h-8 text-primary" />,
+        title: "Strategy Generator",
+        description: "Get an AI-powered, step-by-step strategy to boost your chances of success in court.",
+        href: "#strategy-generator",
       },
       {
         icon: <Gavel className="w-8 h-8 text-primary" />,
@@ -60,6 +66,12 @@ const featuresContent = {
         title: "Generador de Cartas de Demanda",
         description: "Crea una carta de demanda profesional para enviar a la parte contraria antes de presentar tu reclamo.",
         href: "#demand-letter",
+      },
+       {
+        icon: <Lightbulb className="w-8 h-8 text-primary" />,
+        title: "Generador de Estrategias",
+        description: "Obtenga una estrategia paso a paso impulsada por IA para aumentar sus posibilidades de éxito en la corte.",
+        href: "#strategy-generator",
       },
       {
         icon: <Gavel className="w-8 h-8 text-primary" />,
