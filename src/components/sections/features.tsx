@@ -30,12 +30,6 @@ const featuresContent = {
         description: "Assess the strength of your case based on your evidence and other key factors.",
         href: "#analyzer",
       },
-       {
-        icon: <DollarSign className="w-8 h-8 text-primary" />,
-        title: "Fee & Cost Estimator",
-        description: "Use our AI-powered tool to get a real-time estimate of court fees for your specific case.",
-        href: "#fee-estimator",
-      },
       {
         icon: <ListChecks className="w-8 h-8 text-primary" />,
         title: "Step-by-Step Guide",
@@ -72,12 +66,6 @@ const featuresContent = {
         title: "Analizador de Fortaleza del Reclamo",
         description: "Evalúa la solidez de tu caso basándote en tu evidencia y otros factores clave.",
         href: "#analyzer",
-      },
-       {
-        icon: <DollarSign className="w-8 h-8 text-primary" />,
-        title: "Estimador de Tarifas y Costos",
-        description: "Usa nuestra herramienta con IA para obtener una estimación en tiempo real de las tarifas judiciales para tu caso.",
-        href: "#fee-estimator",
       },
       {
         icon: <ListChecks className="w-8 h-8 text-primary" />,
