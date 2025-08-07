@@ -42,12 +42,6 @@ const featuresContent = {
         description: "Easily find the correct courthouse for your small claims case using just your zip code.",
         href: "#court-finder",
       },
-      {
-        icon: <DollarSign className="w-8 h-8 text-primary" />,
-        title: "Fee & Cost Estimator",
-        description: "Estimate filing fees, service costs, and check for fee waiver eligibility.",
-        href: "#estimator",
-      }
     ],
   },
   es: {
@@ -85,12 +79,6 @@ const featuresContent = {
         description: "Encuentra fácilmente el tribunal correcto para tu caso de reclamos menores usando solo tu código postal.",
         href: "#court-finder",
       },
-       {
-        icon: <DollarSign className="w-8 h-8 text-primary" />,
-        title: "Estimador de Tarifas y Costos",
-        description: "Estime las tarifas de presentación, los costos de servicio y verifique la elegibilidad para la exención de tarifas.",
-        href: "#estimator",
-      }
     ],
   }
 };
