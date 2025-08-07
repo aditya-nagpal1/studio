@@ -9,6 +9,7 @@
  */
 
 import {ai} from '@/ai/genkit';
+import {googleSearch} from '@genkit-ai/google-cloud';
 import {z} from 'zod';
 
 const FindFilingFeeInputSchema = z.object({
@@ -31,7 +32,7 @@ const prompt = ai.definePrompt({
     name: 'findFilingFeePrompt',
     input: {schema: FindFilingFeeInputSchema},
     output: {schema: FindFilingFeeOutputSchema},
-    tools: [ai.tool.googleSearch()],
+    tools: [googleSearch],
     prompt: `
 You are a specialized legal research assistant. Your task is to find the official small claims court filing fee for a specific courthouse.
 
