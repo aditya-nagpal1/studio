@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -28,14 +28,27 @@ const formSchema = z.object({
 function CreateProfilePage() {
   const router = useRouter();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, userData } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [photoPreview, setPhotoPreview] = useState(user?.photoURL || '');
+  const [photoPreview, setPhotoPreview] = useState('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { username: '', displayName: user?.displayName || '', bio: '', photoFile: undefined },
+    defaultValues: { username: '', displayName: '', bio: '', photoFile: undefined },
   });
+
+  useEffect(() => {
+    if (user) {
+        form.setValue('displayName', user.displayName || '');
+        setPhotoPreview(user.photoURL || '');
+    }
+    if (userData) {
+        form.setValue('username', userData.username || '');
+        form.setValue('displayName', userData.displayName || user?.displayName || '');
+        form.setValue('bio', userData.bio || '');
+        setPhotoPreview(userData.photoURL || user?.photoURL || '');
+    }
+  }, [user, userData, form]);
   
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
@@ -54,10 +67,14 @@ function CreateProfilePage() {
     }
     try {
       await createUserProfile(user, values);
-      toast({ title: 'Profile Created', description: 'Your profile has been created successfully.' });
+      toast({ title: 'Profile Updated', description: 'Your profile has been updated successfully.' });
       router.push('/profile');
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: error.message });
+        let message = 'An unknown error occurred.';
+        if (error instanceof Error) {
+            message = error.message;
+        }
+      toast({ variant: 'destructive', title: 'Error', description: message });
       setIsLoading(false);
     }
   };
@@ -66,7 +83,7 @@ function CreateProfilePage() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-lg">
         <CardHeader>
-          <CardTitle>Complete Your Profile</CardTitle>
+          <CardTitle>Edit Your Profile</CardTitle>
           <CardDescription>Tell us a bit more about yourself.</CardDescription>
         </CardHeader>
         <CardContent>

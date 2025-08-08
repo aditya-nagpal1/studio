@@ -11,6 +11,10 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   User,
+  getAuth,
+  setPersistence,
+  browserSessionPersistence,
+  browserLocalPersistence
 } from "firebase/auth";
 import { auth, db, storage } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -51,7 +55,7 @@ export const onAuthStateChange = (callback) => {
 export const createUserProfile = async (user, { username, displayName, bio, photoFile }) => {
     if (!user) return;
 
-    let photoURL = user.photoURL;
+    let photoURL = user.photoURL || '';
 
     if (photoFile) {
         const storageRef = ref(storage, `profile_pictures/${user.uid}`);
@@ -70,14 +74,15 @@ export const createUserProfile = async (user, { username, displayName, bio, phot
         username,
         displayName,
         email: user.email,
-        bio,
+        bio: bio || '',
         photoURL,
         createdAt: new Date()
-    });
+    }, { merge: true });
 };
 
 // Get User Profile
 export const getUserProfile = async (uid) => {
+    if (!uid) return null;
     const userRef = doc(db, "users", uid);
     const userSnap = await getDoc(userRef);
     return userSnap.exists() ? userSnap.data() : null;
