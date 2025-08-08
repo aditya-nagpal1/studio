@@ -37,23 +37,40 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const auth = getAuth();
-      await setPersistence(auth, values.rememberMe ? browserLocalPersistence : browserSessionPersistence);
+      await setPersistence(
+        auth,
+        values.rememberMe ? browserLocalPersistence : browserSessionPersistence
+      );
       await signIn(values.email, values.password);
       router.push('/');
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Login Failed', description: error.message });
+      const message =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({
+        variant: 'destructive',
+        title: 'Login Failed',
+        description: message,
+      });
       setIsLoading(false);
     }
   };
-  
+
   const handleGoogleSignIn = async () => {
       setIsLoading(true);
       try {
-          await signInWithGoogle();
-          router.push('/create-profile');
-      } catch(error) {
-          toast({ variant: 'destructive', title: 'Google Sign-In Failed', description: error.message });
-          setIsLoading(false);
+        await signInWithGoogle();
+        router.push('/create-profile');
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred';
+        toast({
+          variant: 'destructive',
+          title: 'Google Sign-In Failed',
+          description: message,
+        });
+        setIsLoading(false);
       }
   }
 

@@ -2,7 +2,8 @@
 "use client";
 
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import { onAuthStateChange, User, getUserProfile } from '@/lib/auth';
+import { onAuthStateChange, getUserProfile } from '@/lib/auth';
+import type { User } from 'firebase/auth';
 import { Loader2 } from 'lucide-react';
 
 interface UserProfile {
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChange(async (user) => {
+    const unsubscribe = onAuthStateChange(async (user: User | null) => {
       setLoading(true);
       setUser(user);
       if (user) {

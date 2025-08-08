@@ -39,19 +39,33 @@ export default function SignupPage() {
       await signUp(values.email, values.password);
       router.push('/create-profile');
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Sign Up Failed', description: error.message });
+      const message =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({
+        variant: 'destructive',
+        title: 'Sign Up Failed',
+        description: message,
+      });
       setIsLoading(false);
     }
   };
-  
+
   const handleGoogleSignIn = async () => {
       setIsLoading(true);
       try {
-          await signInWithGoogle();
-          router.push('/create-profile');
-      } catch(error) {
-          toast({ variant: 'destructive', title: 'Google Sign-In Failed', description: error.message });
-          setIsLoading(false);
+        await signInWithGoogle();
+        router.push('/create-profile');
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred';
+        toast({
+          variant: 'destructive',
+          title: 'Google Sign-In Failed',
+          description: message,
+        });
+        setIsLoading(false);
       }
   }
 
