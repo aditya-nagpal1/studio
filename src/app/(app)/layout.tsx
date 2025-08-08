@@ -9,6 +9,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarProvider,
+  SidebarRail,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useLanguage } from "@/context/language-context";
@@ -79,6 +80,7 @@ export default function AppLayout({
                 </SidebarMenu>
             </SidebarContent>
         </Sidebar>
+        <SidebarRail />
         <SidebarInset>
             <div className="flex items-center gap-2 p-2 border-b md:hidden sticky top-0 bg-background z-10">
                 <SidebarTrigger />
