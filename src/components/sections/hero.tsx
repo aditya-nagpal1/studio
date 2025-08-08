@@ -83,7 +83,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full py-20 md:py-32 lg:py-40 bg-background">
+    <section id="hero" className="relative w-full py-20 md:py-32 lg:py-40 bg-background">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center space-y-6 text-center">
           <div className="space-y-4">
