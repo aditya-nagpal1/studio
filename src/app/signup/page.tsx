@@ -13,6 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { signUp, signInWithGoogle } from '@/lib/auth';
+import { FirebaseError } from 'firebase/app';
 
 const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
@@ -56,10 +57,11 @@ export default function SignupPage() {
         await signInWithGoogle();
         router.push('/create-profile');
       } catch (error) {
+        const firebaseError = error as FirebaseError;
         const message =
-          error instanceof Error
-            ? error.message
-            : 'An unexpected error occurred';
+          firebaseError.code === 'auth/configuration-not-found'
+            ? 'Google sign-in is not configured. Please contact support or enable Google sign-in.'
+            : firebaseError.message || 'An unexpected error occurred';
         toast({
           variant: 'destructive',
           title: 'Google Sign-In Failed',
