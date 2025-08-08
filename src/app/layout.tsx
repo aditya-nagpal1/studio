@@ -10,13 +10,19 @@ import {
   SidebarMenuButton,
   SidebarProvider,
   SidebarTrigger,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import { LanguageProvider, useLanguage } from "@/context/language-context";
-import { Gavel, FileText, ShieldCheck, ListChecks, Map, Lightbulb, Home, Languages } from "lucide-react";
+import { AuthProvider, useAuth } from "@/context/auth-context";
+import { Gavel, FileText, ShieldCheck, ListChecks, Map, Lightbulb, Home, Languages, LogIn, UserPlus, User as UserIcon, LogOut } from "lucide-react";
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
+import { logout } from "@/lib/auth";
+import Link from "next/link";
+
 
 const navLinks = {
     en: [
@@ -43,6 +49,8 @@ const navLinks = {
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   const { language, setLanguage, t } = useLanguage();
+  const { user } = useAuth();
+  const router = useRouter();
   const currentNavLinks = navLinks[language];
   
   const handleScroll = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, href: string) => {
@@ -53,6 +61,11 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const handleLogout = async () => {
+      await logout();
+      router.push('/login');
+  }
+
   const languageLabels = {
     en: "Language",
     es: "Idioma"
@@ -60,7 +73,8 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-        <Sidebar>
+        <Sidebar collapsible="icon">
+            <SidebarRail />
             <SidebarContent className="p-2 flex flex-col">
                 <SidebarMenu className="flex-grow">
                     {currentNavLinks.map((link) => (
@@ -74,12 +88,49 @@ function AppLayout({ children }: { children: React.ReactNode }) {
                                 }}
                             >
                                 {link.icon}
-                                <span>{link.label}</span>
+                                <span className="group-data-[collapsible=icon]:hidden">{link.label}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}
                 </SidebarMenu>
-                <div className="mt-auto p-2">
+                <div className="mt-auto p-2 space-y-2">
+                    {user ? (
+                        <>
+                          <SidebarMenuItem>
+                              <Link href="/profile" className="w-full">
+                                <SidebarMenuButton tooltip={{ children: "Profile", side: "right", align: "center" }}>
+                                    <UserIcon />
+                                    <span className="group-data-[collapsible=icon]:hidden">Profile</span>
+                                </SidebarMenuButton>
+                              </Link>
+                          </SidebarMenuItem>
+                          <SidebarMenuItem>
+                            <SidebarMenuButton onClick={handleLogout} tooltip={{ children: "Logout", side: "right", align: "center" }}>
+                                <LogOut />
+                                <span className="group-data-[collapsible=icon]:hidden">Logout</span>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        </>
+                    ) : (
+                        <>
+                           <SidebarMenuItem>
+                              <Link href="/login" className="w-full">
+                                <SidebarMenuButton tooltip={{ children: "Login", side: "right", align: "center" }}>
+                                    <LogIn />
+                                    <span className="group-data-[collapsible=icon]:hidden">Login</span>
+                                </SidebarMenuButton>
+                               </Link>
+                           </SidebarMenuItem>
+                           <SidebarMenuItem>
+                              <Link href="/signup" className="w-full">
+                                <SidebarMenuButton tooltip={{ children: "Sign Up", side: "right", align: "center" }}>
+                                    <UserPlus />
+                                    <span className="group-data-[collapsible=icon]:hidden">Sign Up</span>
+                                </SidebarMenuButton>
+                               </Link>
+                           </SidebarMenuItem>
+                        </>
+                    )}
                      <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                            <Button variant="ghost" className="w-full justify-start items-center gap-2"
@@ -130,10 +181,12 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
-        <LanguageProvider>
-          <AppLayout>{children}</AppLayout>
-          <Toaster />
-        </LanguageProvider>
+        <AuthProvider>
+            <LanguageProvider>
+              <AppLayout>{children}</AppLayout>
+              <Toaster />
+            </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   );
