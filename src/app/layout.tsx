@@ -12,9 +12,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { LanguageProvider, useLanguage } from "@/context/language-context";
-import { Gavel, FileText, ShieldCheck, ListChecks, Map, Lightbulb, Home } from "lucide-react";
+import { Gavel, FileText, ShieldCheck, ListChecks, Map, Lightbulb, Home, Languages } from "lucide-react";
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const navLinks = {
     en: [
@@ -40,7 +42,7 @@ const navLinks = {
 };
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const { language } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const currentNavLinks = navLinks[language];
   
   const handleScroll = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, href: string) => {
@@ -51,11 +53,16 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const languageLabels = {
+    en: "Language",
+    es: "Idioma"
+  };
+
   return (
     <SidebarProvider>
         <Sidebar>
-            <SidebarContent className="p-2">
-                <SidebarMenu>
+            <SidebarContent className="p-2 flex flex-col">
+                <SidebarMenu className="flex-grow">
                     {currentNavLinks.map((link) => (
                         <SidebarMenuItem key={link.label}>
                             <SidebarMenuButton
@@ -72,6 +79,30 @@ function AppLayout({ children }: { children: React.ReactNode }) {
                         </SidebarMenuItem>
                     ))}
                 </SidebarMenu>
+                <div className="mt-auto p-2">
+                     <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                           <Button variant="ghost" className="w-full justify-start items-center gap-2"
+                            tooltip={{
+                                children: t(languageLabels),
+                                side: "right",
+                                align: "center",
+                            }}
+                           >
+                             <Languages />
+                              <span className="group-data-[collapsible=icon]:hidden">{t(languageLabels)}</span>
+                           </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent side="right" align="end">
+                            <DropdownMenuItem onSelect={() => setLanguage("en")}>
+                                English
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setLanguage("es")}>
+                                Español
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </SidebarContent>
         </Sidebar>
         <SidebarInset>
