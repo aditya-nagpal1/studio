@@ -34,7 +34,9 @@ export default function ForgotPasswordPage() {
       await passwordReset(values.email);
       setIsSent(true);
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: error.message });
+      const message =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      toast({ variant: 'destructive', title: 'Error', description: message });
     } finally {
         setIsLoading(false);
     }

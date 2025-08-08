@@ -10,23 +10,19 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   updateProfile,
-  User,
-  getAuth,
-  setPersistence,
-  browserSessionPersistence,
-  browserLocalPersistence
+  User
 } from "firebase/auth";
 import { auth, db, storage } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // Sign Up
-export const signUp = async (email, password) => {
+export const signUp = async (email: string, password: string) => {
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
 // Sign In
-export const signIn = async (email, password) => {
+export const signIn = async (email: string, password: string) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
 
@@ -42,17 +38,27 @@ export const logout = () => {
 };
 
 // Password Reset
-export const passwordReset = (email) => {
+export const passwordReset = (email: string) => {
   return sendPasswordResetEmail(auth, email);
 };
 
 // Auth State Change
-export const onAuthStateChange = (callback) => {
+export const onAuthStateChange = (callback: (user: User | null) => void) => {
   return onAuthStateChanged(auth, callback);
 };
 
+interface UserProfileInput {
+  username: string;
+  displayName: string;
+  bio?: string;
+  photoFile?: File;
+}
+
 // Create User Profile
-export const createUserProfile = async (user, { username, displayName, bio, photoFile }) => {
+export const createUserProfile = async (
+  user: User | null,
+  { username, displayName, bio, photoFile }: UserProfileInput
+) => {
     if (!user) return;
 
     let photoURL = user.photoURL || '';
@@ -81,7 +87,7 @@ export const createUserProfile = async (user, { username, displayName, bio, phot
 };
 
 // Get User Profile
-export const getUserProfile = async (uid) => {
+export const getUserProfile = async (uid: string) => {
     if (!uid) return null;
     const userRef = doc(db, "users", uid);
     const userSnap = await getDoc(userRef);

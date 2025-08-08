@@ -3,11 +3,11 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, ComponentType } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const withAuth = (WrappedComponent) => {
-  const Wrapper = (props) => {
+const withAuth = <P extends object>(WrappedComponent: ComponentType<P>) => {
+  const Wrapper = (props: P) => {
     const { user, loading } = useAuth();
     const router = useRouter();
 
@@ -27,7 +27,7 @@ const withAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />;
   };
-  
+
   Wrapper.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
   return Wrapper;
