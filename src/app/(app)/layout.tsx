@@ -58,7 +58,7 @@ export default function AppLayout({
 
   return (
     <SidebarProvider>
-        <Sidebar>
+        <Sidebar collapsible="icon">
             <SidebarContent className="p-2">
                 <SidebarMenu>
                     {currentNavLinks.map((link) => (
@@ -72,7 +72,7 @@ export default function AppLayout({
                                 }}
                             >
                                 {link.icon}
-                                <span>{link.label}</span>
+                                <span className="group-data-[collapsible=icon]:hidden">{link.label}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     ))}
